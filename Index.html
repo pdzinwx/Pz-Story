@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🚀 Pz | Store</title>
+  
+  <!-- Banner da loja -->
+<div style="width: 100%; overflow: hidden;">
+  <img src="imagens/banner-pzstory.jpg" alt="Banner Pz Store" style="width: 100%; display: block;">
+</div>
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+    header {
+      background: #000;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: gold;
+      border-bottom: 2px solid gold;
+    }
+    .produtos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 20px;
+    }
+    .produto {
+      background: #1a1a1a;
+      border: 2px solid gold;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+    .produto img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .nome-produto {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .preco {
+      color: lime;
+      font-size: 18px;
+    }
+    .preco-antigo {
+      color: #aaa;
+      text-decoration: line-through;
+      font-size: 14px;
+    }
+    .avaliacao {
+      color: gold;
+    }
+    .btn-carrinho {
+      background: gold;
+      color: black;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-carrinho:hover {
+      background: #ffd700;
+    }
+    #carrinho {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: gold;
+      color: black;
+      padding: 10px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #modalCarrinho, #telaPix {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000000ee;
+      z-index: 999;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .produto-carrinho {
+      border-bottom: 1px solid #333;
+      padding: 10px 0;
+    }
+    .btn-finalizar {
+      background: gold;
+      color: black;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+    }
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: #333;
+      color: gold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: none;
+      animation: fadeInOut 3s forwards;
+    }
+    @keyframes fadeInOut {
+      0% {opacity: 0;}
+      10% {opacity: 1;}
+      90% {opacity: 1;}
+      100% {opacity: 0;}
+    }
+    input, textarea {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: #fff;
+    }
+    
+  </style>
+</head>
+<body>
+
+<header>🚀 Pz | Store</header>
+
+<div class="produtos">
+  <div class="produto">
+    <img src="imagens/robux1200.png" alt="Produto 1">
+    <div class="nome-produto">✔️ 1200 Robux</div>
+    <div class="avaliacao">★★★★★</div>
+    <div class="preco">R$ 19,90</div>
+    <div class="preco-antigo">R$ 25,00</div>
+    <button class="btn-carrinho" onclick="adicionarCarrinho('1200 Robux', 19.90)">Adicionar ao Carrinho</button>
+  </div>
+  <div class="produto">
+    <img src="imagens/robux2100.png" alt="Produto 2">
+    <div class="nome-produto">✔️ 2100 Robux</div>
+    <div class="avaliacao">★★★★☆</div>
+    <div class="preco">R$ 30,90</div>
+    <div class="preco-antigo">R$ 60,00</div>
+    <button class="btn-carrinho" onclick="adicionarCarrinho('2100 Robux', 30.90)">Adicionar ao Carrinho</button>
+    </div>
+    
+    <div class="produto">
+  <img src="imagens/robux700.png" alt="700 Robux">
+  <div class="nome-produto">✔️ 700 Robux</div>
+  <div class="avaliacao">★★★★☆</div>
+  <div class="preco">R$ 10,00</div>
+  <div class="preco-antigo">R$ 15,00</div>
+  <button class="btn-carrinho" onclick="adicionarCarrinho('700 Robux', 10.00)">Adicionar ao Carrinho</button>
+</div>
+
+<!-- Produto 4500 Robux -->
+<div class="produto">
+  <img src="imagens/robux4500.png" alt="4500 Robux">
+  <div class="nome-produto">✔️ 4500 Robux</div>
+  <div class="avaliacao">★★★★★</div>
+  <div class="preco">R$ 40,00</div>
+  <div class="preco-antigo">R$ 55,00</div>
+  <button class="btn-carrinho" onclick="adicionarCarrinho('4500 Robux', 40.00)">Adicionar ao Carrinho</button>
+</div>
+
+<div id="carrinho" onclick="abrirCarrinho()">🛒 Carrinho</div>
+
+<div id="modalCarrinho">
+  <h2>🛒 Seu Carrinho</h2>
+  <div id="itensCarrinho"></div>
+  <div id="totalCarrinho" style="margin-top: 10px;"></div>
+  <button class="btn-finalizar" onclick="abrirTelaPix()">GERAR PIX</button>
+  <!-- Botão Voltar -->
+<button id="voltarLojaBtn" style="
+    margin-top: 10px;
+    background-color: #FFD700;
+    color: black;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+">
+    Voltar para a Loja
+</button>
+</div>
+
+<div id="telaPix">
+  <h2>💸 Pagamento via Pix</h2>
+por favor, apos o pagamento envie o comprovante no discord
+  <input type="email" placeholder="Seu email (obrigatorio)">
+  <input type="text" placeholder="Cupom de desconto">
+  
+  <div style="margin-top: 20px;">
+  <p style="color: white;">Chave Pix:</p>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <input id="chavePix" type="text" value="7c61c905-ff5a-4968-bec9-fc5b9c408043" readonly style="padding: 8px; border-radius: 6px; border: none; width: 200px;">
+    <button onclick="copiarChavePix()" style="background: gold; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+      Copiar
+    </button>
+    
+ <button onclick="voltarParaLoja()" style="margin-top: 20px; background-color: #222; color: #FFD700; padding: 10px 20px; border: 1px solid #FFD700; border-radius: 8px; font-weight: bold; cursor: pointer;">
+  ← Voltar para a Loja
+</button>
+  </div>
+</div>
+
+  
+</div>
+
+<div class="toast" id="toast">Produto adicionado ao carrinho!</div>
+
+<script>
+  let carrinho = [];
+
+  function adicionarCarrinho(nome, preco) {
+    const id = Date.now(); // id único
+    carrinho.push({ id, nome, preco });
+    mostrarToast("Produto adicionado ao carrinho!");
+  }
+
+  function mostrarToast(mensagem) {
+    const toast = document.getElementById("toast");
+    toast.textContent = mensagem;
+    toast.style.display = "block";
+    setTimeout(() => toast.style.display = "none", 3000);
+  }
+
+  function abrirCarrinho() {
+    const modal = document.getElementById("modalCarrinho");
+    const itens = document.getElementById("itensCarrinho");
+    const total = document.getElementById("totalCarrinho");
+
+    itens.innerHTML = "";
+    let totalValor = 0;
+
+    carrinho.forEach(item => {
+      totalValor += item.preco;
+      itens.innerHTML += `
+        <div class="produto-carrinho" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <b>${item.nome}</b> - R$ ${item.preco.toFixed(2)}
+          </div>
+          <button onclick="removerDoCarrinho(${item.id})" style="background: none; border: none; color: red; font-size: 18px; cursor: pointer;">❌</button>
+        </div>`;
+    });
+
+    total.innerHTML = `<h3>Total: R$ ${totalValor.toFixed(2)}</h3>`;
+    modal.style.display = "block";
+  }
+
+  function removerDoCarrinho(id) {
+    carrinho = carrinho.filter(item => item.id !== id);
+    abrirCarrinho(); // atualiza o modal
+  }
+
+  function abrirTelaPix() {
+    document.getElementById("modalCarrinho").style.display = "none";
+    document.getElementById("telaPix").style.display = "block";
+  }
+
+  function confirmarPagamento() {
+    alert("Pagamento confirmado! Em breve entraremos em contato.");
+    location.reload();
+  }
+</script>
+
+
+<!-- Botão flutuante do Discord -->
+<a href="https://discord.gg/wMVnEq6y" target="_blank" id="discordBtn">
+  <img src="imagens/discord.png" alt="Discord" />
+</a>
+
+<style>
+  #discordBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ffd700; /* dourado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px #ffd700;
+    padding: 6px;
+    transition: transform 0.2s ease;
+  }
+
+  #discordBtn:hover {
+    transform: scale(1.1);
+  }
+
+  #discordBtn img {
+    width: 100%;
+    height: auto;
+  }
+</style>
+
+<script>
+function copiarChavePix() {
+  const chaveInput = document.getElementById("chavePix");
+  chaveInput.select();
+  chaveInput.setSelectionRange(0, 99999); // Compatível com mobile
+  document.execCommand("copy");
+
+  // Toast de confirmação
+  const toast = document.createElement("div");
+  toast.innerText = "Chave Pix copiada!";
+  toast.style.position = "fixed";
+  toast.style.bottom = "20px";
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.background = "#333";
+  toast.style.color = "white";
+  toast.style.padding = "10px 20px";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 0 10px gold";
+  toast.style.zIndex = "9999";
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 2000);
+}
+</script>
+
+<script>
+function voltarParaLoja() {
+  const telaPix = document.getElementById("telaPix");
+  if (telaPix) {
+    telaPix.style.display = "none";
+  } else {
+    alert("Tela Pix não encontrada.");
+  }
+}
+
+document.getElementById("voltarLojaBtn").addEventListener("click", function() {
+    document.getElementById("modalCarrinho").style.display = "none";
+});
+</script>
+
+</body>
+</html>
